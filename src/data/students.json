@@ -1,0 +1,50 @@
+[
+  {
+    "roll_number": "1",
+    "name": "him",
+    "age": 12,
+    "course": "cse",
+    "semester": 5,
+    "marks": 90.0
+  },
+  {
+    "roll_number": "CS101",
+    "name": "Aarav Sharma",
+    "age": 20,
+    "course": "Computer Science",
+    "semester": 4,
+    "marks": 88.5
+  },
+  {
+    "roll_number": "CS102",
+    "name": "Priya Patel",
+    "age": 21,
+    "course": "Computer Science",
+    "semester": 6,
+    "marks": 94.0
+  },
+  {
+    "roll_number": "IT201",
+    "name": "Rohan Verma",
+    "age": 22,
+    "course": "Information Technology",
+    "semester": 6,
+    "marks": 76.5
+  },
+  {
+    "roll_number": "EC301",
+    "name": "Ananya Iyer",
+    "age": 19,
+    "course": "Electronics & Communication",
+    "semester": 2,
+    "marks": 82.0
+  },
+  {
+    "roll_number": "ME401",
+    "name": "Vikram Singh",
+    "age": 23,
+    "course": "Mechanical Engineering",
+    "semester": 8,
+    "marks": 68.0
+  }
+]

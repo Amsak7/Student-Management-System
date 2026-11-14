@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Management System | Node.js & Express Academic Project</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+  <!-- Top Academic Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="logo-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+        <div>
+          <h1>Student Management System</h1>
+          <p class="subtitle">Academic Project: Python CLI &rarr; Node.js Express RESTful Refactoring</p>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <button id="workflowBtn" class="btn btn-secondary">
+          <i class="fa-solid fa-diagram-project"></i> System Architecture & Workflow
+        </button>
+        <a href="/api-docs" target="_blank" class="btn btn-primary pulse-btn">
+          <i class="fa-solid fa-bolt"></i> Open Interactive Swagger UI
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+    <!-- Academic Metric KPI Cards -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon blue"><i class="fa-solid fa-users"></i></div>
+        <div class="kpi-data">
+          <span class="kpi-title">Total Students</span>
+          <h2 id="kpiTotal">-</h2>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon green"><i class="fa-solid fa-chart-line"></i></div>
+        <div class="kpi-data">
+          <span class="kpi-title">Class Average</span>
+          <h2 id="kpiAvg">-</h2>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon gold"><i class="fa-solid fa-trophy"></i></div>
+        <div class="kpi-data">
+          <span class="kpi-title">Top Scorer</span>
+          <h2 id="kpiTop">-</h2>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon purple"><i class="fa-solid fa-check-double"></i></div>
+        <div class="kpi-data">
+          <span class="kpi-title">Passing Rate</span>
+          <h2 id="kpiPass">-</h2>
+        </div>
+      </div>
+    </section>
+
+    <!-- Table & Control Section -->
+    <section class="content-panel">
+      <div class="panel-header">
+        <div class="search-filter-group">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search by name or roll number...">
+          </div>
+          <select id="courseFilter" class="filter-select">
+            <option value="">All Courses</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Information Technology">Information Technology</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Mechanical">Mechanical</option>
+            <option value="cse">CSE</option>
+          </select>
+          <select id="sortBy" class="filter-select">
+            <option value="roll_number">Sort by Roll Number</option>
+            <option value="name">Sort by Name</option>
+            <option value="marks">Sort by Marks</option>
+            <option value="semester">Sort by Semester</option>
+          </select>
+          <select id="sortOrder" class="filter-select">
+            <option value="asc">Ascending &uarr;</option>
+            <option value="desc">Descending &darr;</option>
+          </select>
+        </div>
+        <div class="action-buttons">
+          <button id="addStudentBtn" class="btn btn-success">
+            <i class="fa-solid fa-plus"></i> Add Student
+          </button>
+          <button id="resetSeedBtn" class="btn btn-outline" title="Reset sample database to standard seed records">
+            <i class="fa-solid fa-rotate-left"></i> Reset Seed
+          </button>
+        </div>
+      </div>
+
+      <!-- Students Table -->
+      <div class="table-responsive">
+        <table class="students-table">
+          <thead>
+            <tr>
+              <th>Roll No</th>
+              <th>Student Name</th>
+              <th>Age</th>
+              <th>Course</th>
+              <th>Semester</th>
+              <th>Marks</th>
+              <th>Grade</th>
+              <th>Status</th>
+              <th style="text-align: center;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="studentsTableBody">
+            <tr>
+              <td colspan="9" class="loading-state">
+                <i class="fa-solid fa-spinner fa-spin"></i> Loading student records...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer">
+        <span id="recordCountLabel">Showing 0 records</span>
+        <span class="api-tag"><i class="fa-solid fa-link"></i> Endpoint: <code>GET /api/v1/students</code></span>
+      </div>
+    </section>
+  </main>
+
+  <!-- Add/Edit Student Modal -->
+  <div id="studentModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle"><i class="fa-solid fa-user-plus"></i> Add New Student</h3>
+        <button class="close-modal" id="closeModalBtn">&times;</button>
+      </div>
+      <form id="studentForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="rollNumberInput">Roll Number <span class="required">*</span></label>
+            <input type="text" id="rollNumberInput" placeholder="e.g. CS105" required>
+            <small class="field-hint" id="rollHint">Unique identifier (immutable once created)</small>
+          </div>
+          <div class="form-group">
+            <label for="nameInput">Student Full Name <span class="required">*</span></label>
+            <input type="text" id="nameInput" placeholder="e.g. Sneha Rao" required>
+          </div>
+          <div class="form-group">
+            <label for="ageInput">Age (1 - 100) <span class="required">*</span></label>
+            <input type="number" id="ageInput" min="1" max="100" placeholder="20" required>
+          </div>
+          <div class="form-group">
+            <label for="courseInput">Course / Major <span class="required">*</span></label>
+            <input type="text" id="courseInput" placeholder="e.g. Computer Science" required>
+          </div>
+          <div class="form-group">
+            <label for="semesterInput">Semester (1 - 12) <span class="required">*</span></label>
+            <input type="number" id="semesterInput" min="1" max="12" placeholder="4" required>
+          </div>
+          <div class="form-group">
+            <label for="marksInput">Marks (0 - 100) <span class="required">*</span></label>
+            <input type="number" step="0.01" id="marksInput" min="0" max="100" placeholder="85.5" required>
+          </div>
+        </div>
+        <div id="formErrorMessage" class="error-banner hidden"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelFormBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveStudentBtn">
+            <i class="fa-solid fa-floppy-disk"></i> Save Student
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Architecture & Workflow Modal -->
+  <div id="workflowModal" class="modal">
+    <div class="modal-content large-modal">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-sitemap"></i> Project Architecture & Refactoring Workflow</h3>
+        <button class="close-modal" id="closeWorkflowModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="comparison-grid">
+          <div class="arch-box legacy">
+            <h4><i class="fa-brands fa-python"></i> Legacy Python Architecture</h4>
+            <ul>
+              <li><strong>Paradigm:</strong> Synchronous, monolithic CLI terminal script (<code>main.py</code>).</li>
+              <li><strong>Interface:</strong> Text console with blocking <code>input()</code> loops. Single user only.</li>
+              <li><strong>Persistence:</strong> Synchronous file writes to <code>students.json</code>.</li>
+              <li><strong>Extensibility:</strong> Cannot integrate with web, mobile apps, or external APIs.</li>
+            </ul>
+          </div>
+          <div class="arch-box modern">
+            <h4><i class="fa-brands fa-node-js"></i> Refactored Node.js & Express Architecture</h4>
+            <ul>
+              <li><strong>Paradigm:</strong> Non-blocking, asynchronous RESTful API Service.</li>
+              <li><strong>Architecture:</strong> Layered MVC (Controller &rarr; Service &rarr; Repository &rarr; Storage).</li>
+              <li><strong>Documentation:</strong> Interactive Swagger UI (OpenAPI 3.0) for live testing.</li>
+              <li><strong>Integrity:</strong> Atomic asynchronous file transactions, structured validation middleware, HTTP status codes.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h4 style="margin-top: 24px; color: #1e3a8a;"><i class="fa-solid fa-network-wired"></i> End-to-End Request Workflow</h4>
+        <div class="workflow-steps">
+          <div class="step">
+            <span class="step-num">1</span>
+            <strong>Client Request</strong>
+            <p>Browser UI or Swagger UI executes HTTP request (GET, POST, PUT, DELETE).</p>
+          </div>
+          <div class="step">
+            <span class="step-num">2</span>
+            <strong>Middleware Layer</strong>
+            <p>CORS, JSON Parser, Logger, and Input Validation enforce business schemas.</p>
+          </div>
+          <div class="step">
+            <span class="step-num">3</span>
+            <strong>Controller</strong>
+            <p>Dispatches sanitized payloads to the business domain layer.</p>
+          </div>
+          <div class="step">
+            <span class="step-num">4</span>
+            <strong>Service & Metrics</strong>
+            <p>Validates uniqueness, calculates grades (A+-F), computes statistics.</p>
+          </div>
+          <div class="step">
+            <span class="step-num">5</span>
+            <strong>Repository & Storage</strong>
+            <p>Performs atomic async I/O on <code>students.json</code>.</p>
+          </div>
+          <div class="step">
+            <span class="step-num">6</span>
+            <strong>Standard Response</strong>
+            <p>Returns standard JSON envelope with HTTP status (200, 201, 400, 404, 409).</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="closeWorkflowBottomBtn">Got it, Return to Dashboard</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
