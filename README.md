@@ -1,7 +1,7 @@
-# Student Management System (Node.js & Express RESTful API)
+# Student Management System (Node.js Express REST API & Next.js Frontend)
 
 > **Academic Project Submission & Demonstration**  
-> **Course:** Web Technologies / Advanced Software Engineering  
+> **Course:** Web Technologies / Advanced Software Engineering (Capstone Project)  
 > **Target Audience:** Professors, Evaluators, and Viva Examiners  
 > **Original Codebase:** [HimanshuDabralDev/student-management-system](https://github.com/HimanshuDabralDev/student-management-system.git) (Legacy Python CLI)
 
@@ -9,200 +9,124 @@
 
 ## 📌 Executive Summary
 
-This project delivers a complete enterprise-grade refactoring of the legacy Python console-based Student Management System into a modern, asynchronous, non-blocking **RESTful API** powered by **Node.js** and **Express.js**.
-
-To provide a first-class demonstration experience for our professors:
-1. **Interactive Swagger UI (OpenAPI 3.0)** is mounted directly at [`/api-docs`](http://localhost:3000/api-docs) to allow real-time interactive testing of all HTTP endpoints with pre-configured schemas and examples.
-2. A **Live Academic Web Dashboard** is hosted at [`/`](http://localhost:3000) showcasing live KPI metrics, search, sorting, filtering, and student record management.
-3. A formal, printable **Academic Project Report (.docx)** has been compiled and placed at `Student_Management_System_Project_Report.docx`.
+This project delivers a complete enterprise-grade refactoring of the legacy Python console-based Student Management System into a modern full-stack web application:
+1. **Asynchronous RESTful Backend:** Built with **Node.js** and **Express.js**, featuring layered architecture (Controllers, Services, Repositories, Middlewares), atomic crash-safe file persistence, and automated letter grading (A+ through F).
+2. **Modern Next.js Frontend:** Built with **Next.js (App Router)**, **React 19**, and **Tailwind CSS**, featuring real-time academic KPI cards, instant debounced search, multi-criteria filtering, student report card transcripts, and grade distribution histograms.
+3. **Interactive OpenAPI / Swagger UI:** Mounted directly at [`/api-docs`](http://localhost:3000/api-docs) to allow real-time interactive testing of all endpoints with pre-configured schemas and examples.
+4. **Printable Academic Project Report (.docx):** A formal university project file compiled at `Student_Management_System_Project_Report.docx`.
 
 ---
 
-## 🏛️ Architecture: Python CLI vs. Node.js Express
+## 🏛️ Architecture: Python CLI vs. Node.js Express vs. Next.js
 
-| Metric / Feature | Legacy Python System (`main.py`) | Refactored Node.js & Express System |
-| :--- | :--- | :--- |
-| **Execution Paradigm** | Single-threaded, synchronous, blocking I/O | Event-driven, asynchronous, non-blocking Event Loop |
-| **User Interface** | Text-based CLI with blocking `input()` loops | Dual Interface: Interactive Swagger UI + Web Dashboard |
-| **Concurrency** | Single user only; blocks the entire terminal | Multi-tenant concurrent client handling via HTTP REST |
-| **Architecture** | Monolithic procedural script (single file) | Layered MVC Pattern (Routes &rarr; Middlewares &rarr; Controllers &rarr; Services &rarr; Repositories &rarr; Data) |
-| **Error Handling** | Console prints; potential unhandled exceptions | Centralized Error Middleware, HTTP Status Codes (200, 201, 400, 404, 409, 500) |
-| **Data Integrity** | Basic in-memory list serialized to JSON | Atomic temporary file swap (`.tmp` write &rarr; rename), input schema validation |
-| **Academic Analytics** | Manual calculations / None | Built-in grading engine (A+ to F), pass/fail status, real-time statistics |
-| **API Contract** | No API contract or documentation | OpenAPI 3.0.3 specification with Swagger UI sandbox |
-| **Automated Testing** | None | 14 automated integration tests with `node:test` + `supertest` |
+| Metric / Feature | Legacy Python System (`main.py`) | Refactored Node.js Express Backend | Modern Next.js Frontend |
+| :--- | :--- | :--- | :--- |
+| **Execution Paradigm** | Single-threaded, synchronous, blocking I/O | Event-driven, asynchronous V8 Event Loop | React Server & Client Components (SSR/CSR) |
+| **User Interface** | Terminal text console with `input()` prompts | Interactive Swagger UI (`/api-docs`) | Responsive Web Portal with live KPI cards & modals |
+| **Client Concurrency** | Exactly 1 user; process is locked | High-throughput concurrent multi-tenant REST | Real-time reactive client state management |
+| **Architecture** | Monolithic procedural script (346 lines) | Layered MVC Pattern | Component-driven modular App Router architecture |
+| **Error Handling** | Console prints; unhandled crash risks | Centralized Error Middleware, HTTP Status Codes | Inline field validations + toast notification alerts |
+| **Persistence Safety** | Direct file overwrite (`open('w')`) | Atomic temporary-file swap mechanism | Centralized typed API client (`src/lib/api.ts`) |
+| **Academic Analytics** | None | Built-in grading engine (A+ to F), pass/fail status | Dynamic grade distribution & department breakdowns |
+| **Automated Testing** | Zero automated tests | 14 integration tests (`node:test` + `supertest`) | Type-safe build verification (TypeScript + Turbopack) |
 
 ---
 
 ## 📁 Project Directory Structure
 
 ```
-student-management-system/
-├── original-python/                  # Cloned original Python reference code
-│   ├── main.py                       # Legacy console application
-│   ├── students.json                 # Original JSON dataset
-│   └── README.md
+node-express-sms/
+├── src/                                  # Express RESTful Backend
+│   ├── config/index.js                   # Environment & path configurations
+│   ├── controllers/studentController.js  # HTTP request/response handlers
+│   ├── services/studentService.js        # Domain logic, grading algorithm, analytics
+│   ├── repositories/studentRepository.js # Atomic file persistence layer
+│   ├── middlewares/                      # Validation, errors & 404 handlers
+│   ├── routes/studentRoutes.js           # RESTful route definitions
+│   ├── swagger/swaggerDoc.js             # OpenAPI 3.0 specification & Swagger UI
+│   ├── public/                           # Static dashboard fallback
+│   ├── data/students.json                # Active JSON database
+│   ├── app.js                            # Express app assembly & middleware wiring
+│   └── server.js                         # HTTP listener on port 3000
 │
-├── node-express-sms/                 # Modern Refactored Node.js Express Application
+├── frontend/                             # Modern Next.js App Router Frontend
 │   ├── src/
-│   │   ├── config/
-│   │   │   └── index.js              # Environment & path configurations
-│   │   ├── controllers/
-│   │   │   └── studentController.js  # HTTP request/response handlers
-│   │   ├── services/
-│   │   │   └── studentService.js     # Domain logic, grading algorithm, analytics
-│   │   ├── repositories/
-│   │   │   └── studentRepository.js  # Atomic file persistence layer
-│   │   ├── middlewares/
-│   │   │   ├── errors.js             # Custom AppError, NotFound, Conflict, Validation
-│   │   │   ├── errorHandler.js       # Centralized 404 & 500 error handlers
-│   │   │   └── validationMiddleware.js# Input sanitization & business validation
-│   │   ├── routes/
-│   │   │   └── studentRoutes.js      # RESTful route definitions
-│   │   ├── swagger/
-│   │   │   └── swaggerDoc.js         # OpenAPI 3.0 specification & Swagger UI mount
-│   │   ├── public/                   # Client-side Academic Dashboard
-│   │   │   ├── index.html            # Dashboard layout & modals
-│   │   │   ├── style.css             # Responsive CSS & academic badges
-│   │   │   └── app.js                # Vanilla JS client controller & fetch calls
-│   │   ├── data/
-│   │   │   ├── students.json         # Active JSON database
-│   │   │   └── seed_students.json    # Standard seed baseline
-│   │   ├── app.js                    # Express app assembly & middleware wiring
-│   │   └── server.js                 # HTTP listener & graceful shutdown handlers
-│   │
-│   ├── tests/
-│   │   └── student.test.js           # 14 Automated integration tests
-│   ├── .env                          # Configuration environment variables
-│   ├── package.json                  # NPM metadata & dependency manifest
-│   └── README.md                     # Application documentation
+│   │   ├── app/
+│   │   │   ├── layout.tsx                # Root layout with fonts & metadata
+│   │   │   ├── page.tsx                  # Main student dashboard & table
+│   │   │   └── globals.css               # Tailwind CSS theme
+│   │   ├── components/
+│   │   │   ├── Navbar.tsx                # Academic header with live API health ping
+│   │   │   ├── KpiCards.tsx              # 4 Academic metric cards
+│   │   │   ├── StudentTable.tsx          # Filterable, sortable student data table
+│   │   │   ├── StudentModal.tsx          # Add & Edit student form modal
+│   │   │   ├── StudentDetailModal.tsx    # Report card / academic transcript view
+│   │   │   ├── AnalyticsModal.tsx        # Grade distribution histogram
+│   │   │   ├── WorkflowModal.tsx         # Architecture comparison & DFD diagrams
+│   │   │   └── Toast.tsx                 # Real-time event notifications
+│   │   ├── lib/api.ts                    # Centralized typed API client
+│   │   └── types/student.ts              # TypeScript interfaces
+│   ├── next.config.ts                    # API proxy rewrites to Express backend
+│   └── package.json                      # Next.js, React, Tailwind, Lucide dependencies
 │
-└── Student_Management_System_Project_Report.docx  # Printable Academic Project Report
+├── tests/
+│   └── student.test.js                   # 14 Automated integration tests
+├── Student_Management_System_Project_Report.docx # Printable Academic Project Report
+├── package.json                          # Backend dependencies & frontend helper scripts
+└── README.md                             # Project documentation
 ```
 
 ---
 
-## ⚡ Quick Start & Demonstration Guide
+## ⚡ Quick Start & Execution Guide
 
-### 1. Prerequisites
-- **Node.js** (v18.0.0 or later, tested on v24.11.0)
-- **NPM** (v9.0.0 or later)
-
-### 2. Installation
-Open a terminal in the `node-express-sms` folder:
+### 1. Installation
+Install both backend and frontend dependencies:
 ```bash
 npm install
+npm run frontend:install
 ```
 
-### 3. Run Automated Tests
-Verify all 14 integration test cases before presenting:
+### 2. Run Automated Backend Tests
+Verify all 14 integration test cases:
 ```bash
 npm test
 ```
 
-### 4. Start the Application Server
+### 3. Start the Express Backend Server
+In the root directory:
 ```bash
 npm start
 ```
-*(Or use `npm run dev` for auto-reloading during development)*
+- **Backend API:** `http://localhost:3000`
+- **Interactive Swagger UI:** `http://localhost:3000/api-docs`
+- **Health Diagnostics:** `http://localhost:3000/api/v1/health`
 
-The console will output:
+### 4. Start the Next.js Frontend
+In a new terminal window:
+```bash
+npm run frontend
+# Or navigate to frontend folder:
+# cd frontend && npm run dev
 ```
-================================================================
-   STUDENT MANAGEMENT SYSTEM - RESTful API & SWAGGER SERVER     
-================================================================
-🚀 Server running on:       http://localhost:3000
-📖 Interactive Swagger UI:  http://localhost:3000/api-docs
-💻 Student Dashboard UI:   http://localhost:3000
-🩺 Health Diagnostics:     http://localhost:3000/api/v1/health
-📊 Academic Analytics:     http://localhost:3000/api/v1/students/stats
-📁 Data Store:             .../src/data/students.json
-================================================================
-```
+Open **`http://localhost:3001`** (or `http://localhost:3000` if backend port differs) to view the Next.js portal!
 
 ---
 
 ## 🎓 Demonstrating to Professors (Step-by-Step Viva Workflow)
 
-### Stage 1: The Presentation Pitch (2 minutes)
-1. **Explain the objective:** *"Professors, we identified that the legacy Python student management script was constrained to a single console terminal with blocking user inputs. We have engineered a multi-tier, non-blocking Node.js Express REST API that is production-ready, horizontally scalable, and fully documented."*
-2. **Open the Web Dashboard:** Navigate to `http://localhost:3000`. Show the live KPI cards, search bar, and clean student records table.
-
-### Stage 2: The Interactive Swagger Demo (5 minutes)
-1. Navigate to `http://localhost:3000/api-docs`.
-2. **Demonstrate `GET /api/v1/students`:**
-   - Click **Try it out** &rarr; **Execute**.
-   - Show the 200 OK response with the full student list, computed letter grades (`A+`, `A`, `B`), and pass/fail statuses.
-   - Test query filters: Enter `search: Aarav` or `course: Computer Science` to show server-side filtering.
-3. **Demonstrate `POST /api/v1/students` (Data Validation & Conflict Prevention):**
-   - Click **Try it out**.
-   - Enter a duplicate roll number (e.g., `CS101`) &rarr; click **Execute** &rarr; Show the **409 Conflict** response. Explain how this preserves data integrity.
-   - Enter an invalid age (e.g., `150`) &rarr; click **Execute** &rarr; Show the **400 Bad Request** validation response.
-   - Enter a valid new student &rarr; click **Execute** &rarr; Show the **201 Created** response.
-4. **Demonstrate `GET /api/v1/students/{rollNumber}`:**
-   - Test with lowercase `cs101` &rarr; show that case-insensitivity matches `CS101` seamlessly.
-5. **Demonstrate `GET /api/v1/students/stats`:**
-   - Show aggregate analytics: class average marks, top performer, lowest performer, passing percentage, and grade distribution breakdown.
-6. **Demonstrate `PUT /api/v1/students/{rollNumber}`:**
-   - Update marks &rarr; demonstrate that the system automatically recalculates the letter grade and pass status.
-   - Explain that the `roll_number` is immutable to maintain relational integrity.
-7. **Demonstrate `DELETE /api/v1/students/{rollNumber}`:**
-   - Delete a record &rarr; verify deletion via subsequent GET.
-8. **Demonstrate `POST /api/v1/students/reset`:**
-   - Reset data back to default sample state with one click.
-
----
-
-## 🌐 Complete REST API Specification
-
-| HTTP Method | Endpoint | Description | Request Body | Status Codes |
-| :--- | :--- | :--- | :--- | :--- |
-| **GET** | `/api/v1/health` | Service health & diagnostics | None | 200 |
-| **GET** | `/api/v1/students` | List all students (search, filter, sort) | Query params (`search`, `course`, `semester`, `minMarks`, `maxMarks`, `sortBy`, `order`) | 200, 500 |
-| **GET** | `/api/v1/students/stats` | Academic analytics & grade distributions | None | 200, 500 |
-| **GET** | `/api/v1/students/:rollNumber` | Look up student by roll number | Path param: `rollNumber` | 200, 404, 500 |
-| **POST** | `/api/v1/students` | Add new student record | JSON: `roll_number`, `name`, `age`, `course`, `semester`, `marks` | 201, 400, 409, 500 |
-| **PUT** | `/api/v1/students/:rollNumber` | Update student details | JSON: any of `name`, `age`, `course`, `semester`, `marks` | 200, 400, 404, 500 |
-| **DELETE** | `/api/v1/students/:rollNumber` | Delete student record | Path param: `rollNumber` | 200, 404, 500 |
-| **POST** | `/api/v1/students/reset` | Restore initial seed sample data | None | 200, 500 |
-
----
-
-## 🧪 Test Suite Results
-
-```
-▶ Student Management System - Integration Test Suite
-  ✔ 1. GET /api/v1/health should return UP status and server metrics
-  ✔ 2. GET /api/v1/students should list all student records
-  ✔ 3. GET /api/v1/students/:rollNumber should find student case-insensitively
-  ✔ 4. GET /api/v1/students/:rollNumber should return 404 for non-existent roll number
-  ✔ 5. POST /api/v1/students should successfully create a new student record
-  ✔ 6. POST /api/v1/students should return 409 Conflict for duplicate roll number
-  ✔ 7. POST /api/v1/students should return 400 Bad Request for invalid age (> 100)
-  ✔ 8. POST /api/v1/students should return 400 Bad Request for invalid marks (> 100)
-  ✔ 9. PUT /api/v1/students/:rollNumber should update allowable fields and recalculate grade
-  ✔ 10. PUT /api/v1/students/:rollNumber should disallow modifying roll number
-  ✔ 11. DELETE /api/v1/students/:rollNumber should delete the record
-  ✔ 12. GET /api/v1/students/stats should compute accurate analytics
-  ✔ 13. GET /api/v1/students with search query should filter records
-  ✔ 14. GET /api-docs should serve the interactive Swagger documentation page
-✔ 14 passed (100% pass rate)
-```
-
----
-
-## 📄 Project Report for Printing
-
-The project documentation file is generated at:
-**`Student_Management_System_Project_Report.docx`**  
-*(Located in the project root directory)*
-
-It contains the complete academic project documentation:
-- Title Page & Certificate of Authenticity
-- Acknowledgement & Abstract
-- System Analysis & Comparative Study (Python vs Node.js)
-- Software Architecture, DFD Diagrams & Data Dictionary
-- OpenAPI Specification Tables
-- Source Code Walkthrough
-- Test Case Execution Matrix
-- Viva Defense Questions & Answers
+1. **The Executive Pitch:**  
+   *"Respected professors, we transformed the entry-level Python CLI student management tool into a modern full-stack application featuring a high-performance Express.js REST API, an interactive Swagger sandbox, and a Next.js App Router frontend with real-time academic KPI metrics."*
+2. **Live Next.js Frontend Walkthrough:**
+   - Show the 4 KPI cards: Total Students, Class Average, Top Scorer, and Pass Rate.
+   - Test instant search: Type `Aarav` or select Course `Computer Science` to demonstrate reactive filtering.
+   - Click the Eye icon on any student row to view the **Academic Report Card / Transcript** with their letter grade and circular marks gauge.
+   - Click **Add Student** to test client-side and server-side validation (e.g. invalid age > 100 or duplicate roll number).
+   - Click **Analytics** to show the Grade Distribution Histogram (A+ through F) and course breakdown.
+3. **Live Swagger UI Walkthrough:**
+   - Open `http://localhost:3000/api-docs` and click **Try it out** &rarr; **Execute** on `GET /api/v1/students` and `POST /api/v1/students`.
+   - Point out the `409 Conflict` duplicate check and the `201 Created` status code.
+4. **Automated Testing Evidence:**
+   - Run `npm test` in the terminal to display the 14 passing integration tests.
+5. **Project Report File:**
+   - Present the printed or digital copy of [`Student_Management_System_Project_Report.docx`](Student_Management_System_Project_Report.docx).
