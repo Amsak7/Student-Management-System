@@ -136,19 +136,19 @@ export const StudentModal: React.FC<StudentModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
+      <div className="bg-white w-full max-w-lg rounded-xl shadow-2xl border border-slate-200 overflow-hidden">
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4.5 border-b border-slate-100 bg-slate-50/60">
+        <div className="flex items-center justify-between px-6 py-4.5 border-b border-slate-200 bg-slate-50/70">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
-              {isEdit ? <UserCheck className="w-5 h-5" /> : <UserPlus className="w-5 h-5" />}
+            <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold">
+              {isEdit ? <UserCheck className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900">
-                {isEdit ? `Edit Student: ${studentToEdit?.roll_number}` : 'Add New Student'}
+              <h3 className="text-sm font-bold text-slate-900">
+                {isEdit ? `Edit Student: ${studentToEdit?.roll_number}` : 'Enroll New Student'}
               </h3>
               <p className="text-xs text-slate-500">
-                {isEdit ? 'Update details (Roll number is permanent)' : 'Enroll a student into the system'}
+                {isEdit ? 'Update details (Roll number is immutable)' : 'Register student into academic records'}
               </p>
             </div>
           </div>
@@ -163,7 +163,7 @@ export const StudentModal: React.FC<StudentModalProps> = ({
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {serverError && (
-            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs">
+            <div className="flex items-start gap-2.5 p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs">
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
               <span>{serverError}</span>
             </div>
@@ -172,7 +172,7 @@ export const StudentModal: React.FC<StudentModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Roll Number */}
             <div className="space-y-1 sm:col-span-2">
-              <label className="text-xs font-semibold text-slate-700">
+              <label className="text-xs font-medium text-slate-700">
                 Roll Number <span className="text-rose-500">*</span>
               </label>
               <input
@@ -181,7 +181,7 @@ export const StudentModal: React.FC<StudentModalProps> = ({
                 value={rollNumber}
                 onChange={(e) => setRollNumber(e.target.value)}
                 placeholder="e.g. CS108"
-                className={`w-full px-3.5 py-2 text-sm bg-white border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:bg-slate-100 disabled:text-slate-500 font-mono ${
+                className={`w-full px-3 py-2 text-sm bg-white border rounded-lg focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 disabled:bg-slate-100 disabled:text-slate-500 font-mono ${
                   errors.roll_number ? 'border-rose-300' : 'border-slate-200'
                 }`}
               />
@@ -196,7 +196,7 @@ export const StudentModal: React.FC<StudentModalProps> = ({
 
             {/* Student Full Name */}
             <div className="space-y-1 sm:col-span-2">
-              <label className="text-xs font-semibold text-slate-700">
+              <label className="text-xs font-medium text-slate-700">
                 Student Full Name <span className="text-rose-500">*</span>
               </label>
               <input
@@ -204,7 +204,7 @@ export const StudentModal: React.FC<StudentModalProps> = ({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Divya Sharma"
-                className={`w-full px-3.5 py-2 text-sm bg-white border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
+                className={`w-full px-3 py-2 text-sm bg-white border rounded-lg focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 ${
                   errors.name ? 'border-rose-300' : 'border-slate-200'
                 }`}
               />
@@ -213,7 +213,7 @@ export const StudentModal: React.FC<StudentModalProps> = ({
 
             {/* Age */}
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-700">
+              <label className="text-xs font-medium text-slate-700">
                 Age (1-100) <span className="text-rose-500">*</span>
               </label>
               <input
@@ -223,7 +223,7 @@ export const StudentModal: React.FC<StudentModalProps> = ({
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
                 placeholder="20"
-                className={`w-full px-3.5 py-2 text-sm bg-white border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
+                className={`w-full px-3 py-2 text-sm bg-white border rounded-lg focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 ${
                   errors.age ? 'border-rose-300' : 'border-slate-200'
                 }`}
               />
@@ -232,7 +232,7 @@ export const StudentModal: React.FC<StudentModalProps> = ({
 
             {/* Semester */}
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-700">
+              <label className="text-xs font-medium text-slate-700">
                 Semester (1-12) <span className="text-rose-500">*</span>
               </label>
               <input
@@ -242,7 +242,7 @@ export const StudentModal: React.FC<StudentModalProps> = ({
                 value={semester}
                 onChange={(e) => setSemester(e.target.value)}
                 placeholder="4"
-                className={`w-full px-3.5 py-2 text-sm bg-white border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
+                className={`w-full px-3 py-2 text-sm bg-white border rounded-lg focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 ${
                   errors.semester ? 'border-rose-300' : 'border-slate-200'
                 }`}
               />
@@ -251,7 +251,7 @@ export const StudentModal: React.FC<StudentModalProps> = ({
 
             {/* Course */}
             <div className="space-y-1 sm:col-span-2">
-              <label className="text-xs font-semibold text-slate-700">
+              <label className="text-xs font-medium text-slate-700">
                 Course / Academic Major <span className="text-rose-500">*</span>
               </label>
               <input
@@ -259,7 +259,7 @@ export const StudentModal: React.FC<StudentModalProps> = ({
                 value={course}
                 onChange={(e) => setCourse(e.target.value)}
                 placeholder="e.g. Computer Science"
-                className={`w-full px-3.5 py-2 text-sm bg-white border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
+                className={`w-full px-3 py-2 text-sm bg-white border rounded-lg focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 ${
                   errors.course ? 'border-rose-300' : 'border-slate-200'
                 }`}
               />
@@ -268,7 +268,7 @@ export const StudentModal: React.FC<StudentModalProps> = ({
 
             {/* Marks */}
             <div className="space-y-1 sm:col-span-2">
-              <label className="text-xs font-semibold text-slate-700">
+              <label className="text-xs font-medium text-slate-700">
                 Aggregate Marks (%) <span className="text-rose-500">*</span>
               </label>
               <input
@@ -279,7 +279,7 @@ export const StudentModal: React.FC<StudentModalProps> = ({
                 value={marks}
                 onChange={(e) => setMarks(e.target.value)}
                 placeholder="88.5"
-                className={`w-full px-3.5 py-2 text-sm bg-white border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
+                className={`w-full px-3 py-2 text-sm bg-white border rounded-lg focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 ${
                   errors.marks ? 'border-rose-300' : 'border-slate-200'
                 }`}
               />
@@ -287,28 +287,28 @@ export const StudentModal: React.FC<StudentModalProps> = ({
                 <p className="text-[11px] text-rose-600">{errors.marks}</p>
               ) : (
                 <p className="text-[11px] text-slate-400">
-                  Grade is automatically computed (A+ &ge; 90, A &ge; 80, B &ge; 70, C &ge; 60, D &ge; 50, E &ge; 40, F &lt; 40)
+                  Grade scale: A+ &ge; 90, A &ge; 80, B &ge; 70, C &ge; 60, D &ge; 50, E &ge; 40, F &lt; 40
                 </p>
               )}
             </div>
           </div>
 
           {/* Modal Actions */}
-          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-2 pt-4 border-t border-slate-200">
             <button
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
+              className="px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-sm disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors shadow-xs disabled:opacity-50"
             >
-              {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
+              {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               <span>{isEdit ? 'Save Changes' : 'Enroll Student'}</span>
             </button>
           </div>

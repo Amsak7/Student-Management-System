@@ -258,16 +258,16 @@ export default function HomePage() {
               href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api-docs`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline font-semibold"
+              className="text-slate-700 hover:text-slate-900 hover:underline font-medium"
             >
-              Interactive Swagger Docs (/api-docs)
+              Swagger OpenAPI (/api-docs)
             </a>
             <span>&bull;</span>
             <button
               onClick={() => setIsWorkflowModalOpen(true)}
-              className="text-slate-600 hover:text-slate-900 font-semibold"
+              className="text-slate-600 hover:text-slate-900 font-medium"
             >
-              Architecture & Workflow
+              System Architecture
             </button>
           </div>
         </div>

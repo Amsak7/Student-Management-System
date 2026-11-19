@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { X, BarChart3, Trophy, TrendingDown, BookOpen, CheckCircle2 } from 'lucide-react';
+import { X, BarChart3, Award, TrendingDown, BookOpen } from 'lucide-react';
 import { StudentStats } from '@/types/student';
 
 interface AnalyticsModalProps {
@@ -22,15 +22,15 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden max-h-[90vh] flex flex-col">
+      <div className="bg-white w-full max-w-2xl rounded-xl shadow-2xl border border-slate-200 overflow-hidden max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 bg-slate-50/70 shrink-0">
+        <div className="flex items-center justify-between px-6 py-4.5 border-b border-slate-200 bg-slate-50/70 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
-              <BarChart3 className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center">
+              <BarChart3 className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900">
+              <h3 className="text-sm font-bold text-slate-900">
                 Academic Performance Analytics
               </h3>
               <p className="text-xs text-slate-500">
@@ -47,45 +47,45 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({
         </div>
 
         {/* Scrollable Content */}
-        <div className="p-6 overflow-y-auto space-y-6">
+        <div className="p-6 overflow-y-auto space-y-5">
           {/* Key Metrics Banner */}
           <div className="grid grid-cols-3 gap-3">
-            <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-100">
-              <span className="text-[11px] font-bold text-blue-700 uppercase tracking-wider">
-                Average Score
+            <div className="p-4 rounded-lg bg-slate-50 border border-slate-200">
+              <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+                Class Average
               </span>
-              <div className="text-2xl font-black text-slate-900 mt-1">
+              <div className="text-2xl font-bold text-slate-900 mt-1 font-mono">
                 {stats.averageMarks}%
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100">
-              <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">
+            <div className="p-4 rounded-lg bg-slate-50 border border-slate-200">
+              <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
                 Pass Percentage
               </span>
-              <div className="text-2xl font-black text-slate-900 mt-1">
+              <div className="text-2xl font-bold text-slate-900 mt-1 font-mono">
                 {stats.passingPercentage}%
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-purple-50/70 border border-purple-100">
-              <span className="text-[11px] font-bold text-purple-700 uppercase tracking-wider">
+            <div className="p-4 rounded-lg bg-slate-50 border border-slate-200">
+              <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
                 Enrolled Total
               </span>
-              <div className="text-2xl font-black text-slate-900 mt-1">
+              <div className="text-2xl font-bold text-slate-900 mt-1 font-mono">
                 {stats.totalStudents}
               </div>
             </div>
           </div>
 
           {/* Grade Distribution Histogram */}
-          <div className="p-5 rounded-2xl border border-slate-200/80 bg-white">
+          <div className="p-5 rounded-lg border border-slate-200 bg-white">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-sm font-bold text-slate-900">
+              <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
                 Grade Distribution Histogram
               </h4>
-              <span className="text-xs text-slate-500 font-medium">
-                Criterion: A+ (&ge;90) to F (&lt;40)
+              <span className="text-xs text-slate-400 font-mono">
+                A+ (&ge;90) to F (&lt;40)
               </span>
             </div>
 
@@ -94,25 +94,24 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({
                 const count = stats.gradeDistribution?.[grade] || 0;
                 const percentage = Math.round((count / total) * 100);
 
-                let barColor = 'bg-slate-400';
-                if (grade === 'A+' || grade === 'A') barColor = 'bg-emerald-500';
-                else if (grade === 'B') barColor = 'bg-sky-500';
-                else if (grade === 'C') barColor = 'bg-amber-500';
-                else if (grade === 'D') barColor = 'bg-orange-500';
-                else if (grade === 'F') barColor = 'bg-rose-500';
+                let barColor = 'bg-slate-700';
+                if (grade === 'A+' || grade === 'A') barColor = 'bg-slate-900';
+                else if (grade === 'B' || grade === 'C') barColor = 'bg-slate-700';
+                else if (grade === 'D' || grade === 'E') barColor = 'bg-slate-500';
+                else if (grade === 'F') barColor = 'bg-rose-600';
 
                 return (
                   <div key={grade} className="flex items-center gap-3 text-xs">
                     <span className="w-8 font-bold font-mono text-slate-700">
                       {grade}
                     </span>
-                    <div className="flex-1 h-3.5 bg-slate-100 rounded-full overflow-hidden p-0.5">
+                    <div className="flex-1 h-3 bg-slate-100 rounded-full overflow-hidden p-0.5">
                       <div
                         className={`h-full rounded-full transition-all duration-500 ${barColor}`}
                         style={{ width: `${Math.max(percentage, count > 0 ? 8 : 0)}%` }}
                       />
                     </div>
-                    <span className="w-14 text-right font-semibold text-slate-600">
+                    <span className="w-16 text-right font-mono text-slate-600">
                       {count} ({percentage}%)
                     </span>
                   </div>
@@ -122,38 +121,38 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({
           </div>
 
           {/* Top & Lowest Performer Comparison */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             {stats.highestMarks && (
-              <div className="p-4 rounded-2xl bg-amber-50/50 border border-amber-200/70">
-                <div className="flex items-center gap-2 text-amber-800 text-xs font-bold mb-2">
-                  <Trophy className="w-4 h-4 text-amber-600" />
-                  <span>Highest Scoring Student</span>
+              <div className="p-4 rounded-lg bg-white border border-slate-200">
+                <div className="flex items-center gap-1.5 text-slate-700 text-xs font-semibold mb-2">
+                  <Award className="w-4 h-4 text-slate-900" />
+                  <span>Top Academic Scorer</span>
                 </div>
-                <div className="text-base font-bold text-slate-900">
+                <div className="text-sm font-bold text-slate-900">
                   {stats.highestMarks.name}
                 </div>
-                <div className="text-xs text-slate-600 font-mono mt-0.5">
+                <div className="text-xs text-slate-500 font-mono mt-0.5">
                   Roll No: {stats.highestMarks.roll_number} &bull; {stats.highestMarks.marks}%
                 </div>
-                <div className="text-[11px] text-amber-700 mt-1 font-medium">
+                <div className="text-xs text-slate-600 mt-1">
                   {stats.highestMarks.course}
                 </div>
               </div>
             )}
 
             {stats.lowestMarks && (
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <div className="flex items-center gap-2 text-slate-700 text-xs font-bold mb-2">
+              <div className="p-4 rounded-lg bg-white border border-slate-200">
+                <div className="flex items-center gap-1.5 text-slate-700 text-xs font-semibold mb-2">
                   <TrendingDown className="w-4 h-4 text-slate-500" />
-                  <span>Lowest Scoring Student</span>
+                  <span>Minimum Passing Scorer</span>
                 </div>
-                <div className="text-base font-bold text-slate-900">
+                <div className="text-sm font-bold text-slate-900">
                   {stats.lowestMarks.name}
                 </div>
-                <div className="text-xs text-slate-600 font-mono mt-0.5">
+                <div className="text-xs text-slate-500 font-mono mt-0.5">
                   Roll No: {stats.lowestMarks.roll_number} &bull; {stats.lowestMarks.marks}%
                 </div>
-                <div className="text-[11px] text-slate-500 mt-1 font-medium">
+                <div className="text-xs text-slate-600 mt-1">
                   {stats.lowestMarks.course}
                 </div>
               </div>
@@ -162,21 +161,21 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({
 
           {/* Course Distribution */}
           {stats.courseDistribution && Object.keys(stats.courseDistribution).length > 0 && (
-            <div className="p-5 rounded-2xl border border-slate-200/80 bg-white">
-              <div className="flex items-center gap-2 text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">
-                <BookOpen className="w-4 h-4 text-blue-600" />
-                <span>Department / Course Breakdown</span>
+            <div className="p-5 rounded-lg border border-slate-200 bg-white">
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-900 uppercase tracking-wider mb-3">
+                <BookOpen className="w-4 h-4 text-slate-700" />
+                <span>Department Enrollment Breakdown</span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                 {Object.entries(stats.courseDistribution).map(([course, count]) => (
                   <div
                     key={course}
-                    className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between"
+                    className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between"
                   >
                     <span className="text-xs font-medium text-slate-700 truncate mr-2" title={course}>
                       {course}
                     </span>
-                    <span className="text-xs font-bold bg-white px-2 py-0.5 rounded-full border border-slate-200 text-slate-800">
+                    <span className="text-xs font-bold font-mono bg-white px-2 py-0.5 rounded border border-slate-200 text-slate-900">
                       {count}
                     </span>
                   </div>
@@ -187,10 +186,10 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex justify-end shrink-0">
+        <div className="p-3.5 border-t border-slate-200 bg-slate-50/50 flex justify-end shrink-0">
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-xl text-sm font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-100 transition-colors"
+            className="px-4 py-2 rounded-lg text-xs font-medium text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 transition-colors"
           >
             Close Analytics
           </button>

@@ -37,39 +37,28 @@ const ToastItem: React.FC<{
     return () => clearTimeout(timer);
   }, [toast.id, onDismiss]);
 
-  const getStyle = () => {
-    switch (toast.type) {
-      case 'success':
-        return 'bg-emerald-600 text-white shadow-emerald-500/20';
-      case 'error':
-        return 'bg-rose-600 text-white shadow-rose-500/20';
-      default:
-        return 'bg-blue-600 text-white shadow-blue-500/20';
-    }
-  };
-
   const getIcon = () => {
     switch (toast.type) {
       case 'success':
-        return <CheckCircle2 className="w-4 h-4 shrink-0" />;
+        return <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />;
       case 'error':
-        return <AlertCircle className="w-4 h-4 shrink-0" />;
+        return <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />;
       default:
-        return <Info className="w-4 h-4 shrink-0" />;
+        return <Info className="w-4 h-4 shrink-0 text-slate-700" />;
     }
   };
 
   return (
     <div
-      className={`pointer-events-auto flex items-center justify-between gap-3 px-4 py-3 rounded-2xl shadow-lg transition-all duration-300 text-xs font-semibold ${getStyle()} animate-in slide-in-from-bottom-2`}
+      className="pointer-events-auto flex items-center justify-between gap-3 px-3.5 py-3 rounded-lg shadow-lg bg-white border border-slate-200 text-slate-900 transition-all duration-300 text-xs font-medium animate-in slide-in-from-bottom-2"
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2.5">
         {getIcon()}
         <span>{toast.message}</span>
       </div>
       <button
         onClick={() => onDismiss(toast.id)}
-        className="p-1 text-white/80 hover:text-white rounded-lg transition-colors"
+        className="p-1 text-slate-400 hover:text-slate-700 rounded transition-colors"
       >
         <X className="w-3.5 h-3.5" />
       </button>
