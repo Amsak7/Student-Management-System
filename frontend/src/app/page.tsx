@@ -255,7 +255,7 @@ export default function HomePage() {
           </p>
           <div className="flex items-center gap-4">
             <a
-              href="http://localhost:3000/api-docs"
+              href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api-docs`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 hover:underline font-semibold"

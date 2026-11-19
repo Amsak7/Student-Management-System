@@ -100,7 +100,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Interactive Swagger Button */}
             <a
-              href="http://localhost:3000/api-docs"
+              href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api-docs`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors border border-blue-200"

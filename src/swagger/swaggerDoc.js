@@ -1,4 +1,5 @@
 const swaggerUi = require('swagger-ui-express');
+const config = require('../config');
 
 const openApiSpec = {
   openapi: '3.0.3',
@@ -700,6 +701,13 @@ const customCss = `
 `;
 
 function setupSwagger(app) {
+  openApiSpec.servers = [
+    {
+      url: `http://localhost:${config.port}`,
+      description: 'Local Development & Demonstration Server',
+    },
+  ];
+
   const swaggerHtml = swaggerUi.generateHTML(openApiSpec, {
     customCss,
     customSiteTitle: 'Student Management System - Interactive Swagger API Docs',

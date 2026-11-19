@@ -1,4 +1,6 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
+
+const backendPort = process.env.NEXT_PUBLIC_BACKEND_PORT || '5000';
 
 const nextConfig: NextConfig = {
   turbopack: {
@@ -7,8 +9,8 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api/v1/:path*",
-        destination: "http://localhost:3000/api/v1/:path*",
+        source: '/api/v1/:path*',
+        destination: `http://localhost:${backendPort}/api/v1/:path*`,
       },
     ];
   },

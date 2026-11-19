@@ -12,8 +12,24 @@
 This project delivers a complete enterprise-grade refactoring of the legacy Python console-based Student Management System into a modern full-stack web application:
 1. **Asynchronous RESTful Backend:** Built with **Node.js** and **Express.js**, featuring layered architecture (Controllers, Services, Repositories, Middlewares), atomic crash-safe file persistence, and automated letter grading (A+ through F).
 2. **Modern Next.js Frontend:** Built with **Next.js (App Router)**, **React 19**, and **Tailwind CSS**, featuring real-time academic KPI cards, instant debounced search, multi-criteria filtering, student report card transcripts, and grade distribution histograms.
-3. **Interactive OpenAPI / Swagger UI:** Mounted directly at [`/api-docs`](http://localhost:3000/api-docs) to allow real-time interactive testing of all endpoints with pre-configured schemas and examples.
+3. **Interactive OpenAPI / Swagger UI:** Mounted directly at [`/api-docs`](http://localhost:5000/api-docs) to allow real-time interactive testing of all endpoints with pre-configured schemas and examples.
 4. **Printable Academic Project Report (.docx):** A formal university project file compiled at `Student_Management_System_Project_Report.docx`.
+
+---
+
+## 🌐 Port Configuration & Service Architecture
+
+To prevent any port collisions and follow standard full-stack web engineering practices, the application services are configured as follows:
+
+| Service | Technology | Port | Access URL | Purpose |
+| :--- | :--- | :--- | :--- | :--- |
+| **Backend REST API** | Node.js + Express | **`5000`** | `http://localhost:5000` | REST API endpoints, business logic, atomic file I/O |
+| **Interactive Swagger UI** | OpenAPI 3.0 / Swagger | **`5000`** | `http://localhost:5000/api-docs` | Live API testing sandbox for professors & evaluators |
+| **Backend Health Check** | Express Handler | **`5000`** | `http://localhost:5000/api/v1/health` | Uptime, memory, and runtime diagnostics |
+| **Next.js Web Portal** | Next.js 16 + React 19 | **`3000`** (or `3001`) | `http://localhost:3000` | Responsive Academic Dashboard & Student Directory |
+
+> **Why Port 5000 for Backend?**  
+> In modern web development, Port 5000 is the standard port for backend REST microservices, ensuring Port 3000 remains completely free for the user-facing Next.js frontend without any port conflicts or address collisions!
 
 ---
 
@@ -36,8 +52,8 @@ This project delivers a complete enterprise-grade refactoring of the legacy Pyth
 
 ```
 node-express-sms/
-├── src/                                  # Express RESTful Backend
-│   ├── config/index.js                   # Environment & path configurations
+├── src/                                  # Express RESTful Backend (Port 5000)
+│   ├── config/index.js                   # Environment & port configurations
 │   ├── controllers/studentController.js  # HTTP request/response handlers
 │   ├── services/studentService.js        # Domain logic, grading algorithm, analytics
 │   ├── repositories/studentRepository.js # Atomic file persistence layer
@@ -47,9 +63,9 @@ node-express-sms/
 │   ├── public/                           # Static dashboard fallback
 │   ├── data/students.json                # Active JSON database
 │   ├── app.js                            # Express app assembly & middleware wiring
-│   └── server.js                         # HTTP listener on port 3000
+│   └── server.js                         # HTTP listener on port 5000
 │
-├── frontend/                             # Modern Next.js App Router Frontend
+├── frontend/                             # Modern Next.js App Router Frontend (Port 3000/3001)
 │   ├── src/
 │   │   ├── app/
 │   │   │   ├── layout.tsx                # Root layout with fonts & metadata
@@ -64,9 +80,9 @@ node-express-sms/
 │   │   │   ├── AnalyticsModal.tsx        # Grade distribution histogram
 │   │   │   ├── WorkflowModal.tsx         # Architecture comparison & DFD diagrams
 │   │   │   └── Toast.tsx                 # Real-time event notifications
-│   │   ├── lib/api.ts                    # Centralized typed API client
+│   │   ├── lib/api.ts                    # Centralized typed API client (targets port 5000)
 │   │   └── types/student.ts              # TypeScript interfaces
-│   ├── next.config.ts                    # API proxy rewrites to Express backend
+│   ├── next.config.ts                    # API proxy rewrites to Express backend (:5000)
 │   └── package.json                      # Next.js, React, Tailwind, Lucide dependencies
 │
 ├── tests/
@@ -93,38 +109,54 @@ Verify all 14 integration test cases:
 npm test
 ```
 
-### 3. Start the Express Backend Server
-In the root directory:
+### 3. Start the Express Backend Server (Port 5000)
+In your first terminal window:
 ```bash
 npm start
 ```
-- **Backend API:** `http://localhost:3000`
-- **Interactive Swagger UI:** `http://localhost:3000/api-docs`
-- **Health Diagnostics:** `http://localhost:3000/api/v1/health`
+Console output:
+```
+================================================================
+   STUDENT MANAGEMENT SYSTEM - RESTful API & SWAGGER SERVER     
+================================================================
+🚀 Server running on:       http://localhost:5000
+📖 Interactive Swagger UI:  http://localhost:5000/api-docs
+💻 Student Dashboard UI:   http://localhost:5000
+🩺 Health Diagnostics:     http://localhost:5000/api/v1/health
+📊 Academic Analytics:     http://localhost:5000/api/v1/students/stats
+📁 Data Store:             .../src/data/students.json
+================================================================
+```
 
-### 4. Start the Next.js Frontend
-In a new terminal window:
+### 4. Start the Next.js Frontend Portal (Port 3000)
+In your second terminal window:
 ```bash
 npm run frontend
-# Or navigate to frontend folder:
-# cd frontend && npm run dev
 ```
-Open **`http://localhost:3001`** (or `http://localhost:3000` if backend port differs) to view the Next.js portal!
+Console output:
+```
+▲ Next.js 16.4.6 (Turbopack)
+- Local:        http://localhost:3000
+- Environments: .env.local
+```
+
+Now open **`http://localhost:3000`** in your browser to interact with the full-stack portal!
 
 ---
 
 ## 🎓 Demonstrating to Professors (Step-by-Step Viva Workflow)
 
 1. **The Executive Pitch:**  
-   *"Respected professors, we transformed the entry-level Python CLI student management tool into a modern full-stack application featuring a high-performance Express.js REST API, an interactive Swagger sandbox, and a Next.js App Router frontend with real-time academic KPI metrics."*
-2. **Live Next.js Frontend Walkthrough:**
+   *"Respected professors, we transformed the entry-level Python CLI student management tool into a modern full-stack application featuring a high-performance Express.js REST API on port 5000, an interactive Swagger sandbox, and a Next.js App Router frontend on port 3000 with real-time academic KPI metrics."*
+2. **Live Next.js Frontend Walkthrough (`http://localhost:3000`):**
    - Show the 4 KPI cards: Total Students, Class Average, Top Scorer, and Pass Rate.
    - Test instant search: Type `Aarav` or select Course `Computer Science` to demonstrate reactive filtering.
    - Click the Eye icon on any student row to view the **Academic Report Card / Transcript** with their letter grade and circular marks gauge.
    - Click **Add Student** to test client-side and server-side validation (e.g. invalid age > 100 or duplicate roll number).
    - Click **Analytics** to show the Grade Distribution Histogram (A+ through F) and course breakdown.
-3. **Live Swagger UI Walkthrough:**
-   - Open `http://localhost:3000/api-docs` and click **Try it out** &rarr; **Execute** on `GET /api/v1/students` and `POST /api/v1/students`.
+3. **Live Swagger UI Walkthrough (`http://localhost:5000/api-docs`):**
+   - Click the "Swagger Docs" button in the Next.js navbar to open `http://localhost:5000/api-docs`.
+   - Click **Try it out** &rarr; **Execute** on `GET /api/v1/students` and `POST /api/v1/students`.
    - Point out the `409 Conflict` duplicate check and the `201 Created` status code.
 4. **Automated Testing Evidence:**
    - Run `npm test` in the terminal to display the 14 passing integration tests.

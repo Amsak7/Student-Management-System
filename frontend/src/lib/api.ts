@@ -9,7 +9,7 @@ import {
 } from '@/types/student';
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') || 'http://localhost:3000';
+  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') || 'http://localhost:5000';
 
 class ApiError extends Error {
   statusCode: number;
